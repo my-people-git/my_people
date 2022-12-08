@@ -1,26 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigation } from "@/common-ui/Navigation/Navigation";
-// import { auth } from "./firebaseAuth/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useAppDispatch } from "store";
+import { setUserData } from "features/auth.slice";
 const App = () => {
-  const logoutUser = () => {
-    auth
-      .signOut()
-      .then(() => {
-        //set user to null
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const dispatch = useAppDispatch();
+  // const logoutUser = () => {
+  //   auth
+  //     .signOut()
+  //     .then(() => {
+  //       //set user to null
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  // useEffect(() => {
-  //   const unSubscribe = auth.onAuthStateChanged((user) => {
-  //     console.log(user);
-  //   });
-  //   return unSubscribe;
-  // }, []);
+  useEffect(() => {
+    const auth = getAuth();
+    const unSubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userData = {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        };
+        dispatch(setUserData({ userData }));
+      }
+    });
+    return unSubscribe;
+  }, []);
 
-  return <Navigation></Navigation>;
+  return <Navigation />;
 };
 
 export default App;
