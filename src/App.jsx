@@ -5,16 +5,6 @@ import { useAppDispatch } from "store";
 import { setUserData } from "features/auth.slice";
 const App = () => {
   const dispatch = useAppDispatch();
-  // const logoutUser = () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => {
-  //       //set user to null
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   useEffect(() => {
     const auth = getAuth();
