@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import path from "path";
 import { readdirSync } from "fs";
 import reactRefresh from "@vitejs/plugin-react-refresh";
-
 const absolutePathAliases: { [key: string]: string } = {};
 // Root resources folder
 const srcPath = path.resolve("./src/");
@@ -19,14 +18,10 @@ export default defineConfig({
   resolve: {
     alias: {
       ...absolutePathAliases,
-      "@": path.resolve(__dirname, "./src"),
     },
   },
-
   build: {
-    rollupOptions: {
-      input: "/main.jsx",
-    },
+    outDir: "./build",
   },
   plugins: [reactRefresh()],
 });

@@ -1,27 +1,19 @@
 import React, { useEffect } from "react";
-import { Navigation } from "@/common-ui/Navigation/Navigation";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Navigation } from "common-ui/Navigation/Navigation";
 import { useAppDispatch } from "store";
 import { setUserData } from "features/auth.slice";
+import { usePersistUser } from "hooks/PersistUserData";
+
 const App = () => {
   const dispatch = useAppDispatch();
+  const handleSetUserData = (userData) => dispatch(setUserData({ userData }));
+  usePersistUser(handleSetUserData);
 
-  useEffect(() => {
-    const auth = getAuth();
-    const unSubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const userData = {
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-        };
-        dispatch(setUserData({ userData }));
-      }
-    });
-    return unSubscribe;
-  }, []);
-
-  return <Navigation />;
+  return (
+    <div className="box-border">
+      <Navigation />
+    </div>
+  );
 };
 
 export default App;

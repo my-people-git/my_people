@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Home } from "@/pages/Home";
+import { Home } from "pages/Home";
 import { Dashboard } from "pages/Dashboard/Dashboard";
 import { useAppSelector } from "store";
 

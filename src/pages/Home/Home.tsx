@@ -18,6 +18,7 @@ export const Home = () => {
           displayName: result.user.displayName,
           email: result.user.email,
           photoURL: result.user.photoURL,
+          uid: result.user.uid,
         };
         dispatch(setUserData({ userData, status: "success" }));
       }
