@@ -12,7 +12,7 @@
 build
 /build/*
 /client/build
-
+/.firebase
 # misc
 .DS_Store
 .env.local

@@ -1,12 +1,12 @@
 import React from "react";
-import { auth, provider } from "firebaseAuth/firebase";
+import { auth, firestore, provider } from "firebaseAuth/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useAppDispatch, useAppSelector } from "store";
+import { useAppDispatch } from "store";
 import { setUserData, setUserStatus } from "features/auth.slice";
+import { doc, setDoc } from "firebase/firestore";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
-  const userDetails = useAppSelector((state) => state.userDetails);
 
   const loginUser = async () => {
     dispatch(setUserStatus("loading"));
@@ -20,7 +20,12 @@ export const Home = () => {
           photoURL: result.user.photoURL,
           uid: result.user.uid,
         };
-        dispatch(setUserData({ userData, status: "success" }));
+        setDoc(
+          doc(firestore, "users", userData.uid),
+          { ...userData },
+          { merge: true }
+        );
+        dispatch(setUserData({ userData, status: "success", requests: [] }));
       }
     } catch (err) {
       console.log(err);

@@ -17,7 +17,12 @@ export const Header = () => {
   };
   return (
     <>
-      <button onClick={logoutUser}>logout</button>
+      <button
+        className="bg-red-500 rounded-md p-2 block m-2"
+        onClick={logoutUser}
+      >
+        logout
+      </button>
     </>
   );
 };

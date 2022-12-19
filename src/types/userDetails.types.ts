@@ -9,5 +9,7 @@ export type UserDataType = {
 
 export type UserDetailsInitialType = {
   userData: null | UserDataType;
+  requests: UserDataType[];
+  frineds: UserDataType[];
   status: StatusType;
 };
