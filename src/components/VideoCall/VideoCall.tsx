@@ -2,13 +2,13 @@ import React from "react";
 import { useAppSelector } from "store";
 import { Videos } from "components/Videos";
 import { useInitialVideoCall } from "hooks/useInitialVideoCall";
-const channelName = "main";
 
-export const VideoCall = ({
-  setStartCall,
-}: {
+type VideoCallProps = {
   setStartCall: (param: boolean) => void;
-}) => {
+  channelName: string;
+};
+
+export const VideoCall = ({ setStartCall, channelName }: VideoCallProps) => {
   const { userData } = useAppSelector((state) => state.userDetails);
   const { usersTracks, currentUserTracks, leaveChannel, mute, trackState } =
     useInitialVideoCall({

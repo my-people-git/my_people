@@ -10,6 +10,6 @@ export type UserDataType = {
 export type UserDetailsInitialType = {
   userData: null | UserDataType;
   requests: UserDataType[];
-  frineds: UserDataType[];
+  frineds: UserDataType[] & { channelId: string };
   status: StatusType;
 };

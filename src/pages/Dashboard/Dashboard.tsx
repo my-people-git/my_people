@@ -15,24 +15,36 @@ import { UserDataType } from "types/userDetails.types";
 import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { setFriendsData, setRequestsData } from "features/auth.slice";
-
 type UserProps = UserDataType & {
   handleSendFriendRequest?: ({ uid }: { uid: string }) => void;
   handleAcceptFriendRequest?: (user: UserDataType) => void;
+  handleStartVideoCall: (channelName: string) => void;
+  channelId?: string;
 };
+function uuid() {
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+}
 
 const User = ({
   photoURL,
   uid,
   displayName,
   email,
+  channelId,
   handleSendFriendRequest,
   handleAcceptFriendRequest,
+  handleStartVideoCall,
 }: UserProps) => {
   return (
     <div>
       {photoURL && <img src={photoURL} />}
       <h1>{displayName}</h1>
+      <h1>{channelId}</h1>
       {handleSendFriendRequest && (
         <button onClick={() => handleSendFriendRequest({ uid })}>
           Add Friend
@@ -45,6 +57,12 @@ const User = ({
           }
         >
           Add Friend
+        </button>
+      )}
+      {channelId && (
+        <button onClick={() => handleStartVideoCall(channelId)}>
+          {" "}
+          Start Video call
         </button>
       )}
     </div>
@@ -113,8 +131,17 @@ const Requests = () => {
         "users",
         `${user.uid}/friends/${userData.uid}`
       );
-      await setDoc(currentUserFriendsRef, user, { merge: true });
-      await setDoc(friendedUserFriendsRef, userData, { merge: true });
+      const channelId = uuid();
+      await setDoc(
+        currentUserFriendsRef,
+        { ...user, channelId },
+        { merge: true }
+      );
+      await setDoc(
+        friendedUserFriendsRef,
+        { ...userData, channelId },
+        { merge: true }
+      );
     }
   };
   return (
@@ -131,14 +158,22 @@ const Requests = () => {
   );
 };
 
-const Friends = () => {
+const Friends = ({
+  handleStartVideoCall,
+}: {
+  handleStartVideoCall: (channelName: string) => void;
+}) => {
   const { frineds } = useAppSelector((state) => state.userDetails);
 
   return (
     <div className="">
       <h3 className="text-xl">Friends</h3>
       {frineds.map((frined) => (
-        <User {...frined} key={frined.uid} />
+        <User
+          {...frined}
+          key={frined.uid}
+          handleStartVideoCall={handleStartVideoCall}
+        />
       ))}
     </div>
   );
@@ -147,7 +182,12 @@ const Friends = () => {
 export const Dashboard = () => {
   const [startCall, setStartCall] = useState<boolean>(false);
   const { userData, requests } = useAppSelector((state) => state.userDetails);
+  const [channelName, setChannelName] = useState("");
   const dispatch = useDispatch();
+  const handleStartVideoCall = (channelName: string) => {
+    setChannelName(channelName);
+    setStartCall(true);
+  };
   useEffect(() => {
     (async () => {
       if (userData) {
@@ -183,8 +223,10 @@ export const Dashboard = () => {
       <Header />
       <SearchUsers />
       <Requests />
-      <Friends />
-      {startCall && <VideoCall setStartCall={setStartCall} />}
+      <Friends handleStartVideoCall={handleStartVideoCall} />
+      {startCall && channelName && (
+        <VideoCall channelName="" setStartCall={setStartCall} />
+      )}
       <div className="grid place-content-center">
         {!startCall && (
           <button
