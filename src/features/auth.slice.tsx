@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserDetailsInitialType, StatusType } from "types/userDetails.types";
+import {
+  UserDetailsInitialType,
+  StatusType,
+  Friend,
+} from "types/userDetails.types";
 const initialState: UserDetailsInitialType = {
   userData: null,
   status: "idle",
@@ -13,9 +17,15 @@ const userDetailsSlice = createSlice({
       state.status = "success";
       state.userData = action.payload.userData;
     },
-    setUserStatus: (state, actions: PayloadAction<StatusType>) => {
-      state.status = actions.payload;
+    setUserStatus: (state, action: PayloadAction<StatusType>) => {
+      state.status = action.payload;
     },
+    addFriend: (state, action: PayloadAction<Friend>) => {
+      if (state.userData) {
+        state.userData.friends = [...state.userData.friends, action.payload];
+      }
+    },
+    removeFriend: (state, action),
   },
 });
 

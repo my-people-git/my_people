@@ -1,8 +1,10 @@
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Home } from "@/pages/Home";
-import { Dashboard } from "pages/Dashboard/Dashboard";
+import { Home } from "pages/Home";
+import { Dashboard } from "pages/Dashboard";
+import { AddAndRemoveFriends } from "pages/AddAndRemoveFriends";
 import { useAppSelector } from "store";
+import { Header } from "common-ui/Header/Header";
 
 const useGetFromAndPath = (defaultfrom: string) => {
   const location = useLocation();
@@ -29,8 +31,11 @@ const OnlyPublicRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 export const Navigation = () => {
+  const userDetails = useAppSelector((state) => state.userDetails);
+
   return (
     <>
+      {userDetails && <Header />}
       <Routes>
         <Route
           path="/"
@@ -45,6 +50,14 @@ export const Navigation = () => {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/add-and-remove-friends"
+          element={
+            <PrivateRoute>
+              <AddAndRemoveFriends />
             </PrivateRoute>
           }
         />

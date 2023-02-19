@@ -14,6 +14,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
+auth.languageCode = "en";
 const provider = new GoogleAuthProvider();
 
 export { auth, provider };

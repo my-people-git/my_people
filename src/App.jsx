@@ -14,6 +14,7 @@ const App = () => {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
+          friends: [],
         };
         dispatch(setUserData({ userData }));
       }
