@@ -1,5 +1,6 @@
 export type StatusType = "idle" | "loading" | "success" | "error";
 export type Friend = {
+  id: string;
   phoneNumber: string;
   deleted: boolean;
   name: string;

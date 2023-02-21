@@ -11,8 +11,9 @@ const App = () => {
     const unSubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const userData = {
+          uid: user.uid,
+          phoneNumber: user.phoneNumber,
           displayName: user.displayName,
-          email: user.email,
           photoURL: user.photoURL,
           friends: [],
         };

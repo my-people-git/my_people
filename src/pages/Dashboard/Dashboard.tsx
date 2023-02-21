@@ -60,7 +60,13 @@ export const Dashboard = () => {
     <>
       <Grid container>
         {contacts?.map(({ name, tel }) => (
-          <Grid container xs={6} justifyContent="center" alignItems="center">
+          <Grid
+            key={tel}
+            container
+            xs={6}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Avatar name={name} tel={tel} />
           </Grid>
         ))}

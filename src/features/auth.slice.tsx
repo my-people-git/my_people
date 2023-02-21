@@ -25,10 +25,17 @@ const userDetailsSlice = createSlice({
         state.userData.friends = [...state.userData.friends, action.payload];
       }
     },
-    removeFriend: (state, action),
+    removeFriend: (state, action: PayloadAction<String>) => {
+      if (state.userData) {
+        state.userData.friends = state.userData.friends.filter(
+          (friend) => friend.id !== action.payload
+        );
+      }
+    },
   },
 });
 
-export const { setUserData, setUserStatus } = userDetailsSlice.actions;
+export const { setUserData, setUserStatus, addFriend, removeFriend } =
+  userDetailsSlice.actions;
 
 export const userDetailsReducer = userDetailsSlice.reducer;
