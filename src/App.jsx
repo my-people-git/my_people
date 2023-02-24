@@ -12,10 +12,6 @@ const App = () => {
       if (user) {
         const userData = {
           uid: user.uid,
-          phoneNumber: user.phoneNumber,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          friends: [],
         };
         dispatch(setUserData({ userData }));
       }

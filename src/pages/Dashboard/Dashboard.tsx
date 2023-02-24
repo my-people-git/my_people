@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { Header } from "common-ui/Header/Header";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useNavigate } from "react-router-dom";
-
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+} from "firebase/firestore";
+import { useAppSelector } from "store";
+import { db } from "firebaseAuth/firebase";
+import { useDispatch } from "react-redux";
+import { setUserData } from "features/auth.slice";
 type ContactType = {
   name: string;
   tel: string;
@@ -52,25 +62,59 @@ const AddFriendButton = () => {
 
 export const Dashboard = () => {
   const [contacts, setContacts] = useState<null | ContactType[]>();
+  const userData = useAppSelector((state) => state.userDetails.userData);
+  const dispatch = useDispatch();
   useEffect(() => {
     const result = getContacts();
     setContacts(result);
+    (async () => {
+      if (userData) {
+        const userRef = doc(db, "users", userData.uid);
+        const friendsRef = collection(db, "users", userData.uid, "friends");
+        const userSnapShot = await getDoc(userRef);
+        const friendsSnapshot = await getDocs(friendsRef);
+        const data = userSnapShot.data();
+        //@ts-ignore
+        const friends = [];
+        friendsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const friend = { ...data, id: doc.id };
+          friends.push(friend);
+        });
+        dispatch(
+          setUserData({
+            //@ts-ignore
+            userData: {
+              uid: userData.uid,
+              ...data,
+              //@ts-ignore
+              friends,
+            },
+          })
+        );
+      }
+    })();
   }, []);
   return (
     <>
       <Grid container>
-        {contacts?.map(({ name, tel }) => (
-          <Grid
-            key={tel}
-            container
-            xs={6}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Avatar name={name} tel={tel} />
-          </Grid>
-        ))}
+        {userData?.friends?.map(
+          ({ name, phoneNumber, deleted }) =>
+            !deleted && (
+              <Grid
+                item
+                key={phoneNumber}
+                container
+                xs={6}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Avatar name={name} tel={phoneNumber} />
+              </Grid>
+            )
+        )}
         <Grid
+          item
           container
           xs={contacts?.length && contacts.length % 2 === 0 ? 12 : 6}
           justifyContent="center"

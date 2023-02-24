@@ -22,13 +22,25 @@ const userDetailsSlice = createSlice({
     },
     addFriend: (state, action: PayloadAction<Friend>) => {
       if (state.userData) {
-        state.userData.friends = [...state.userData.friends, action.payload];
+        if (
+          !!state.userData.friends.find(
+            (friend) => friend.id === action.payload.id
+          )
+        ) {
+          state.userData.friends = state.userData.friends.map((friend) =>
+            friend.id === action.payload.id
+              ? { ...friend, deleted: false }
+              : friend
+          );
+        } else {
+          state.userData.friends = [...state.userData.friends, action.payload];
+        }
       }
     },
     removeFriend: (state, action: PayloadAction<String>) => {
       if (state.userData) {
-        state.userData.friends = state.userData.friends.filter(
-          (friend) => friend.id !== action.payload
+        state.userData.friends = state.userData.friends.map((friend) =>
+          friend.id === action.payload ? { ...friend, deleted: true } : friend
         );
       }
     },

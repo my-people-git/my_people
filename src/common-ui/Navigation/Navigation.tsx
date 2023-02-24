@@ -5,6 +5,7 @@ import { Dashboard } from "pages/Dashboard";
 import { AddAndRemoveFriends } from "pages/AddAndRemoveFriends";
 import { useAppSelector } from "store";
 import { Header } from "common-ui/Header/Header";
+import { ProfilePage } from "pages/ProfilePage";
 
 const useGetFromAndPath = (defaultfrom: string) => {
   const location = useLocation();
@@ -58,6 +59,14 @@ export const Navigation = () => {
           element={
             <PrivateRoute>
               <AddAndRemoveFriends />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           }
         />

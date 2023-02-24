@@ -8,6 +8,7 @@ export type Friend = {
 
 export type UserDetailsInitialType = {
   userData: null | {
+    uid: string;
     displayName: string | null;
     email: string | null;
     photoURL: string | null;
