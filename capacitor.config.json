@@ -1,0 +1,6 @@
+{
+  "appId": "my.vue.app",
+  "appName": "my-vue-app",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

@@ -48,7 +48,7 @@ const Avatar = ({ name, tel }: ContactType) => {
 const AddFriendButton = () => {
   const navigate = useNavigate();
   const handleAddButtonCLicked = () => {
-    navigate("/add-and-remove-friends");
+    navigate("/add_and_remove_friends");
   };
   return (
     <div
@@ -81,6 +81,7 @@ export const Dashboard = () => {
           const friend = { ...data, id: doc.id };
           friends.push(friend);
         });
+        console.log(data);
         dispatch(
           setUserData({
             //@ts-ignore

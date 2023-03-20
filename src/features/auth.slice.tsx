@@ -37,17 +37,27 @@ const userDetailsSlice = createSlice({
         }
       }
     },
-    removeFriend: (state, action: PayloadAction<String>) => {
+    removeFriend: (state, action: PayloadAction<string>) => {
       if (state.userData) {
         state.userData.friends = state.userData.friends.map((friend) =>
           friend.id === action.payload ? { ...friend, deleted: true } : friend
         );
       }
     },
+    updateName: (state, action: PayloadAction<string>) => {
+      if (state.userData) {
+        state.userData.displayName = action.payload;
+      }
+    },
   },
 });
 
-export const { setUserData, setUserStatus, addFriend, removeFriend } =
-  userDetailsSlice.actions;
+export const {
+  setUserData,
+  setUserStatus,
+  addFriend,
+  removeFriend,
+  updateName,
+} = userDetailsSlice.actions;
 
 export const userDetailsReducer = userDetailsSlice.reducer;

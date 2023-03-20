@@ -3,9 +3,32 @@ import { getAuth, signOut } from "firebase/auth";
 import { useAppDispatch } from "store";
 import { setUserData } from "features/auth.slice";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+type AvatarProps = {
+  onClick: () => void;
+  size: "sm" | "lg";
+};
+
+const sizeNumberObj = {
+  lg: 24,
+  sm: 10,
+};
+
+const Avatar = ({ onClick, size }: AvatarProps) => {
+  return (
+    <div
+      className={`w-${sizeNumberObj[size]} h-${sizeNumberObj[size]} bg-blue-600 rounded-full p-2 m-2`}
+      onClick={onClick}
+    >
+      GD
+    </div>
+  );
+};
 
 export const Header = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const logoutUser = () => {
     const auth = getAuth();
     signOut(auth)
@@ -18,12 +41,7 @@ export const Header = () => {
   };
   return (
     <header className="w-100 h-15 bg-blue-400 sticky top-0 right-0 left-0 flex flex-wrap content-center justify-end ">
-      <div
-        className="w-10 h-10 bg-blue-600 rounded-full p-2 m-2"
-        onClick={logoutUser}
-      >
-        GD
-      </div>
+      <Avatar size="sm" onClick={() => navigate("/my_profile")} />
     </header>
   );
 };

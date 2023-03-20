@@ -25,7 +25,9 @@ export default defineConfig({
 
   build: {
     rollupOptions: {
-      input: "/main.jsx",
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+      },
     },
   },
   plugins: [reactRefresh()],

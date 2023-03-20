@@ -11,7 +11,7 @@ export type UserDetailsInitialType = {
     uid: string;
     displayName: string | null;
     email: string | null;
-    photoURL: string | null;
+    displayPicture: string | null;
     friends: Friend[];
   };
   status: StatusType;

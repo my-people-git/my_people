@@ -48,7 +48,6 @@ export const AddAndRemoveFriends = () => {
   const ContactsWithFlag = userDetails.userData?.friends
     ? getListwithAddedFlag(userDetails.userData.friends, contactsList)
     : [];
-  console.log({ ContactsWithFlag, friend: userDetails.userData?.friends });
   const handleAddFriendClick = async (friend: Contact) => {
     if (userDetails.userData) {
       const friendsRef = doc(
@@ -77,7 +76,6 @@ export const AddAndRemoveFriends = () => {
       dispatch(removeFriend(id));
     }
   };
-  console.log({ ContactsWithFlag });
   return (
     <>
       <Title></Title>
