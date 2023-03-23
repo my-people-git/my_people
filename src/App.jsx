@@ -9,6 +9,7 @@ const App = () => {
   useEffect(() => {
     const auth = getAuth();
     const unSubscribe = onAuthStateChanged(auth, (user) => {
+      console.log({ auth });
       if (user) {
         const userData = {
           uid: user.uid,
