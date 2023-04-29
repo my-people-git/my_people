@@ -5,20 +5,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { setUserData, setUserStatus } from "features/auth.slice";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { RecaptchaVerifier } from "firebase/auth";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-
-const config = {
-  apiKey: "AIzaSyAeue-AsYu76MMQlTOM-KlbYBlusW9c1FM",
-  authDomain: "myproject-1234.firebaseapp.com",
-  // ...
-};
-const uiConfig = {
-  // Popup signin flow rather than redirect flow.
-  signInFlow: "popup",
-  // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-  signInSuccessUrl: "/signedIn",
-  // We will display Google and Facebook as auth providers.
-};
+import OTPInput, { ResendOTP } from "otp-input-react";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
@@ -54,51 +41,66 @@ export const Home = () => {
   return (
     <>
       <div id="recaptcha-container" className="hidden"></div>
-      <Stack p={8} height="100vh" gap={4}>
-        <Typography mt={16} textAlign="center" variant="h2">
-          My People
-        </Typography>
-        {!showOTPScreen && (
-          <>
-            <Stack justifyContent="center" direction="row" gap={2}>
-              <TextField
-                label="Mobile Number"
-                variant="filled"
-                type="text"
+      <div className="h-full p-4 flex flex-col">
+        <h3 className="mt-32 text-3xl text-green-500 font-medium">
+          Stay bonded with your closest friends no matter where you are, thanks
+          to My people.
+        </h3>
+        <div className="flex flex-col mt-16 justify-center">
+          {!showOTPScreen && (
+            <>
+              <label>
+                <span className="text-md text-gray-200">
+                  Please Enter your Mobile number
+                </span>
+              </label>
+              <input
+                className="bg-zinc-900 mt-2 border-2 border-gray-700 pt-4 pb-4 pl-2 w-full rounded text-gray-200"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-              ></TextField>
-              <Button
-                onClick={loginUser}
-                id="sign-in-button"
-                variant="contained"
-              >
-                Send OTP
-              </Button>
-            </Stack>
-          </>
-        )}
-        {showOTPScreen && (
-          <>
-            <Stack justifyContent="center" direction="row" gap={2}>
-              <TextField
-                label="OTP"
-                variant="filled"
-                type="text"
+                inputMode="numeric"
+                type="number"
+                pattern="[0-9]*"
+              ></input>
+              <div className="absolute bottom-2 left-2 right-2">
+                <button
+                  onClick={loginUser}
+                  id="sign-in-button"
+                  className="w-full bg-green-500 rounded mt-2 p-4 text-lg font-bold"
+                >
+                  Send OTP
+                </button>
+              </div>
+            </>
+          )}
+          {showOTPScreen && (
+            <>
+              <label>
+                <span className="text-md text-gray-200">Please Enter OTP</span>
+              </label>
+              <OTPInput
                 value={OTP}
-                onChange={(e) => setOTP(e.target.value)}
-              ></TextField>
-              <Button
-                onClick={VerifyOTP}
-                id="sign-in-button"
-                variant="contained"
-              >
-                Send OTP
-              </Button>
-            </Stack>
-          </>
-        )}
-      </Stack>
+                onChange={setOTP}
+                autoFocus
+                OTPLength={4}
+                otpType="number"
+                disabled={false}
+                inputStyles={{ width: "40px", height: "48px" }}
+                inputClassName="w-24 h-24 bg-zinc-900 mt-2 border-2 border-gray-700 pt-4 pb-4 pl-2 w-full rounded text-gray-200"
+              />
+              <div className="absolute bottom-2 left-2 right-2">
+                <button
+                  onClick={VerifyOTP}
+                  id="sign-in-button"
+                  className="w-full bg-green-500 rounded mt-2 p-4 text-lg font-bold"
+                >
+                  Submit
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 };

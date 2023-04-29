@@ -2158,6 +2158,11 @@
     "is-docker" "^2.1.1"
     "is-wsl" "^2.2.0"
 
+"otp-input-react@^0.3.0":
+  "integrity" "sha512-6HDgAUp+biz18cfeX8189g6sOqA5UGmTeqkREz1MI8x92N8kU/M8YtwLtl60j3pbGkMVbrm3f4n4wtXPeVpMmg=="
+  "resolved" "https://registry.npmjs.org/otp-input-react/-/otp-input-react-0.3.0.tgz"
+  "version" "0.3.0"
+
 "parent-module@^1.0.0":
   "integrity" "sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g=="
   "resolved" "https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz"

@@ -21,7 +21,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="bg-zinc-900 ">
+    <div className="bg-zinc-950 h-screen">
       <Navigation />
     </div>
   );
