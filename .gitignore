@@ -6,3 +6,5 @@ dist-ssr
 .env
 ios
 android
+# Local Netlify folder
+.netlify

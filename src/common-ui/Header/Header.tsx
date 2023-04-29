@@ -41,7 +41,7 @@ export const Header = () => {
   };
   return (
     <header className="w-100 h-15 bg-blue-400 sticky top-0 right-0 left-0 flex flex-wrap content-center justify-end ">
-      <Avatar size="sm" onClick={() => navigate("/my_profile")} />
+      <Avatar size="sm" onClick={logoutUser} />
     </header>
   );
 };

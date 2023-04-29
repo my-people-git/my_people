@@ -20,7 +20,11 @@ const App = () => {
     return unSubscribe;
   }, []);
 
-  return <Navigation />;
+  return (
+    <div className="bg-zinc-900 ">
+      <Navigation />
+    </div>
+  );
 };
 
 export default App;
