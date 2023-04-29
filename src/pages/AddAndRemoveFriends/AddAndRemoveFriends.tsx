@@ -1,19 +1,18 @@
-import { Button, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { Friend } from "types/userDetails.types";
 import { addFriend, removeFriend } from "features/auth.slice";
 import { uuidv4 } from "@firebase/util";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseAuth/firebase";
 
 const Title = () => {
   return (
     <>
-      <Typography variant="h6" m={1}>
+      <h3 className="text-lg mb-10 text-green-500 font-medium">
         Please add close Connections (Max 9 ) from Your contacts with whom you
         want to stay in touch
-      </Typography>
+      </h3>
     </>
   );
 };
@@ -77,42 +76,36 @@ export const AddAndRemoveFriends = () => {
     }
   };
   return (
-    <>
+    <div className="p-4">
       <Title></Title>
       {ContactsWithFlag.map(
         //@ts-ignore
         ({ name, phoneNumber, alreadyAdded, id, deleted }) => (
-          <Stack
-            direction="row"
-            className="bg-gray-200"
-            p={1}
-            borderRadius={1}
-            m={1}
-            justifyContent="space-between"
-            alignItems="center"
+          <div
+            className="w-full flex items-center justify-between border-solid border-b border-gray-500 drop-shadow-md p-2 mb-2"
             key={id}
           >
-            <Typography variant="body1">{name}</Typography>
+            <h3 className="text-lg text-white">{name}</h3>
             {!alreadyAdded && (
-              <Button
-                variant="outlined"
+              <button
+                className="bg-green-500 p-2 pl-4 pr-4 rounded font-medium"
                 onClick={() => handleAddFriendClick({ name, phoneNumber, id })}
               >
                 Add
-              </Button>
+              </button>
             )}
             {alreadyAdded && (
-              <Button
-                variant="outlined"
+              <button
+                className="border border-solid border-green-500 text-green-500 p-2 pl-4 pr-4 rounded font-medium"
                 onClick={() => handleRemoveFriendClick(phoneNumber)}
                 color="error"
               >
                 Remove
-              </Button>
+              </button>
             )}
-          </Stack>
+          </div>
         )
       )}
-    </>
+    </div>
   );
 };

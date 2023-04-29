@@ -5,3 +5,11 @@
 * {
   font-family: "Lora", serif;
 }
+
+.glass-effect {
+  background: hsla(0, 0%, 100%, 0.07);
+  border: 1px solid hsla(0, 0%, 100%, 0.08);
+}
+.glass-blur {
+  backdrop-filter: blur(25px);
+}

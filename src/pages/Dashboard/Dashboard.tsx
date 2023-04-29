@@ -33,10 +33,10 @@ const Avatar = ({ name, tel }: ContactType) => {
   };
   return (
     <div
-      className="bg-blue-400 m-2 p-2 rounded-full w-24 h-24 flex flex-wrap content-center justify-center"
+      className="bg-green-500 m-2 p-2 rounded-full w-10 h-10 flex flex-wrap content-center justify-center"
       onClick={handleAvatarClick}
     >
-      <h3 className="text-4xl">
+      <h3 className="text-md">
         {lastname
           ? `${firstname[0] + lastname[0]}`
           : `${firstname.slice(0, 2)}`}
@@ -51,11 +51,20 @@ const AddFriendButton = () => {
     navigate("/add_and_remove_friends");
   };
   return (
-    <div
+    <button
       onClick={handleAddButtonCLicked}
-      className="m-2 p-2 border-dashed border-2 border-sky-500 rounded-full w-24 h-24 flex flex-wrap content-center justify-center"
+      className="w-full border border-solid border-green-500 text-green-500 rounded mt-2 p-4 text-lg "
     >
-      <AddCircleOutlineIcon fontSize="large" />
+      Add Friends
+    </button>
+  );
+};
+
+const Card = ({ name, tel }: ContactType) => {
+  return (
+    <div className="w-full flex items-center rounded-md bg-zinc-900 border-solid border border-gray-500 drop-shadow-md">
+      <Avatar name={name} tel={tel} />
+      <h3 className="text-lg text-white">{name}</h3>
     </div>
   );
 };
@@ -98,21 +107,13 @@ export const Dashboard = () => {
   }, []);
   return (
     <>
-      <Grid container>
+      <Grid container gap={1} p={2}>
+        <h3 className="text-3xl mb-8 text-green-500 font-medium">
+          Welcome to My People{" "}
+        </h3>
         {userData?.friends?.map(
           ({ name, phoneNumber, deleted }) =>
-            !deleted && (
-              <Grid
-                item
-                key={phoneNumber}
-                container
-                xs={6}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Avatar name={name} tel={phoneNumber} />
-              </Grid>
-            )
+            !deleted && <Card name={name} tel={phoneNumber} />
         )}
         <Grid
           item

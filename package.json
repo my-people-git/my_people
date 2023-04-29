@@ -9,6 +9,7 @@
     "ionic:serve": "npm run serve"
   },
   "dependencies": {
+    "@capacitor-community/contacts": "^4.0.3",
     "@capacitor/android": "4.7.1",
     "@capacitor/app": "4.1.1",
     "@capacitor/cli": "4.7.1",

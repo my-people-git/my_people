@@ -36,7 +36,6 @@ export const Navigation = () => {
 
   return (
     <>
-      {/* {userDetails && <Header />} */}
       <Routes>
         <Route
           path="/"
