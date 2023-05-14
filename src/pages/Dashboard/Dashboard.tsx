@@ -95,7 +95,6 @@ export const Dashboard = () => {
       }
     })();
   }, []);
-  console.log({ userData });
   return (
     <>
       <Grid container p={2}>
