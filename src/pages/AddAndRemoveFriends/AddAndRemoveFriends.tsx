@@ -4,7 +4,7 @@ import { Friend } from "types/userDetails.types";
 import { addFriend, removeFriend } from "features/auth.slice";
 import { uuidv4 } from "@firebase/util";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { db } from "firebaseAuth/firebase";
+import { db, eventLogger } from "firebaseAuth/firebase";
 import { Contacts, GetContactsResult } from "@capacitor-community/contacts";
 
 const retrieveListOfContacts = async () => {
@@ -73,16 +73,16 @@ export const AddAndRemoveFriends = () => {
     contactsList
   );
   const handleAddFriendClick = async (friend: Contact) => {
-    console.log({ friend });
     if (userDetails.userData) {
-      const friendsRef = doc(
-        db,
-        "users",
-        userDetails.userData.uid,
-        "friends",
-        friend.phoneNumber
-      );
-      // addDoc(userRef);
+      eventLogger("my_people_updated", {
+        prev_count: userDetails.userData.friends.length,
+        type: "added",
+        contactName: friend.name,
+        contactNumber: friend.phoneNumber,
+      });
+      const uid = userDetails.userData.uid || "";
+      const phoneNumber = friend.phoneNumber || "";
+      const friendsRef = doc(db, "users", uid, "friends", phoneNumber);
       await setDoc(friendsRef, { ...friend });
       dispatch(addFriend({ ...friend, deleted: false }));
     }
@@ -90,6 +90,10 @@ export const AddAndRemoveFriends = () => {
 
   const handleRemoveFriendClick = async (id: string) => {
     if (userDetails.userData) {
+      eventLogger("my_people_updated", {
+        prev_count: userDetails.userData.friends.length,
+        type: "removed",
+      });
       const friendRef = doc(
         db,
         "users",

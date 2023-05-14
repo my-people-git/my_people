@@ -3,6 +3,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import { getFirestore } from "firebase/firestore";
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -19,4 +20,7 @@ auth.languageCode = "en";
 const provider = new GoogleAuthProvider();
 const db = getFirestore(firebaseApp);
 
-export { auth, provider, db };
+const analytics = getAnalytics();
+const eventLogger = (eventName = "", data = {}) =>
+  logEvent(analytics, eventName, data);
+export { auth, provider, db, eventLogger };

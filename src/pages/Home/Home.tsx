@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { auth } from "firebaseAuth/firebase";
+import { auth, eventLogger } from "firebaseAuth/firebase";
 import { signInWithPhoneNumber } from "firebase/auth";
 import { useAppDispatch } from "store";
 import { RecaptchaVerifier } from "firebase/auth";
@@ -19,6 +19,7 @@ export const Home = () => {
     verifier.verify();
     signInWithPhoneNumber(auth, `+91${phoneNumber}`, verifier)
       .then((confirmationResult) => {
+        eventLogger("otp_sent");
         setLoading(false);
         //@ts-ignore
         window.confirmationResult = confirmationResult;
@@ -31,6 +32,7 @@ export const Home = () => {
   };
 
   const VerifyOTP = () => {
+    eventLogger("otp_verify");
     //@ts-ignore
     window.confirmationResult.confirm(OTP);
   };

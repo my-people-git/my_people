@@ -11,7 +11,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { useAppSelector } from "store";
-import { db } from "firebaseAuth/firebase";
+import { db, eventLogger } from "firebaseAuth/firebase";
 import { useDispatch } from "react-redux";
 import { setUserData } from "features/auth.slice";
 type ContactType = {
@@ -36,6 +36,7 @@ const Avatar = ({ name }: ContactType) => {
 const AddFriendButton = () => {
   const navigate = useNavigate();
   const handleAddButtonCLicked = () => {
+    eventLogger("add_friend_button_clicked");
     navigate("/add_and_remove_friends");
   };
   return (
@@ -50,6 +51,7 @@ const AddFriendButton = () => {
 
 const Card = ({ name, tel }: ContactType) => {
   const handleAvatarClick = () => {
+    eventLogger("friend_icon_clicked", { name, tel });
     window.open(`https://api.whatsapp.com/send/?phone=${tel}`);
   };
   return (

@@ -1,6 +1,6 @@
 {
-  "appId": "v1",
-  "appName": "My People",
+  "appId": "my.vue.app",
+  "appName": "My Poeple",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {
