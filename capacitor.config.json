@@ -2,5 +2,9 @@
   "appId": "my.vue.app",
   "appName": "my-vue-app",
   "webDir": "dist",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://mypeooples.netlify.app/",
+    "cleartext": true
+  }
 }

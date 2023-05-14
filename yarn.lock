@@ -272,6 +272,11 @@
   "resolved" "https://registry.npmjs.org/@capacitor/haptics/-/haptics-4.1.0.tgz"
   "version" "4.1.0"
 
+"@capacitor/ios@^4.8.0":
+  "integrity" "sha512-FbEXFzZIe5EGZNKpGxHNUEGKjcKK0XY45P3QXLoJPF3fEndW96ThLZOy3rHjt436sTu41NubFpPyIzyyy1YgMA=="
+  "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-4.8.0.tgz"
+  "version" "4.8.0"
+
 "@capacitor/keyboard@4.1.1":
   "integrity" "sha512-fdC7u2TeG4BqwC0LnPnhOdya31C4QKdhk/8pc5lxI9X5jyYAetMCN1kEkKa7KREw4DdzXotJt27B9BXxAza6og=="
   "resolved" "https://registry.npmjs.org/@capacitor/keyboard/-/keyboard-4.1.1.tgz"

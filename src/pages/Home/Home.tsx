@@ -6,15 +6,14 @@ import { RecaptchaVerifier } from "firebase/auth";
 import OTPInput from "otp-input-react";
 import loader from "../../assests/loader.svg";
 export const Home = () => {
-  const dispatch = useAppDispatch();
-  const [phoneNumber, setPhoneNumber] = useState("7888859607");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [OTP, setOTP] = useState("");
   const [showOTPScreen, setShowOTPScreen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [verifier, setVerifier] = useState<RecaptchaVerifier | null>(null);
   const recaptchaRef = useRef<HTMLElement | null>(null);
   const loginUser = () => {
-    if (loading) return;
+    if (loading && phoneNumber.length !== 10) return;
     setLoading(true);
     if (!recaptchaRef.current || !verifier) return;
     verifier.verify();
@@ -50,13 +49,15 @@ export const Home = () => {
     };
   }, []);
 
+  const submitDisabled = loading || phoneNumber.length !== 10;
+
   return (
     <>
       <div ref={recaptchaRef} className="hidden"></div>
       <div className="h-full p-4 flex flex-col">
-        <h3 className="mt-32 text-3xl text-green-500 font-medium">
+        <h3 className="mt-32 text-3xl text-gray-300 font-medium">
           Stay bonded with your closest friends no matter where you are, thanks
-          to My people.
+          to <span className="text-green-500">My People</span>.
         </h3>
         <div className="flex flex-col mt-16 justify-center">
           {!showOTPScreen ? (
@@ -81,8 +82,8 @@ export const Home = () => {
                 <button
                   onClick={loginUser}
                   id="sign-in-button"
-                  className="w-full relative flex items-center justify-center bg-green-500 rounded mt-2 p-4 text-lg font-bold"
-                  disabled={loading}
+                  className="w-full relative flex items-center justify-center bg-green-500 rounded mt-2 p-4 text-lg font-medium disabled:bg-gray-800 disabled:text-gray-400"
+                  disabled={submitDisabled}
                 >
                   {loading ? (
                     <img src={loader} className="w-6" alt="loader" />
@@ -105,13 +106,14 @@ export const Home = () => {
                 otpType="number"
                 disabled={false}
                 inputStyles={{ width: "40px", height: "48px" }}
-                inputClassName="bg-zinc-900 mt-2 border-2 border-gray-700 pt-4 pb-4 pl-1 w-full rounded text-gray-200"
+                inputClassName="bg-zinc-900 mt-2 border-2 border-gray-700 pt-4 pb-4 pl-1 w-full rounded text-gray-200 "
               />
               <div className="absolute bottom-2 left-2 right-2">
                 <button
                   onClick={VerifyOTP}
                   id="sign-in-button"
-                  className="w-full bg-green-500 rounded mt-2 p-4 text-lg"
+                  disabled={OTP.length !== 6}
+                  className="w-full bg-green-500 rounded mt-2 p-4 text-lg font-medium disabled:bg-gray-800 disabled:text-gray-400"
                 >
                   Submit
                 </button>

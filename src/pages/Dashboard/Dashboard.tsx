@@ -19,23 +19,11 @@ type ContactType = {
   tel: string;
 };
 
-function getContacts() {
-  return [
-    { name: "Gagandeep Singh", tel: "7888859607" },
-    { name: "J Singh", tel: "+917888659607" },
-  ];
-}
-
-const Avatar = ({ name, tel }: ContactType) => {
+const Avatar = ({ name }: ContactType) => {
   const [firstname, lastname] = name.split(" ");
-  const handleAvatarClick = () => {
-    window.open(`https://api.whatsapp.com/send/?phone=${tel}`);
-  };
+
   return (
-    <div
-      className="bg-green-500 m-2 p-2 rounded-full w-10 h-10 flex flex-wrap content-center justify-center"
-      onClick={handleAvatarClick}
-    >
+    <div className="bg-green-500 m-2 p-2 rounded-full w-10 h-10 flex flex-wrap content-center justify-center">
       <h3 className="text-md">
         {lastname
           ? `${firstname[0] + lastname[0]}`
@@ -61,8 +49,14 @@ const AddFriendButton = () => {
 };
 
 const Card = ({ name, tel }: ContactType) => {
+  const handleAvatarClick = () => {
+    window.open(`https://api.whatsapp.com/send/?phone=${tel}`);
+  };
   return (
-    <div className="w-full flex items-center rounded-md bg-zinc-900 border-solid border border-gray-500 drop-shadow-md">
+    <div
+      onClick={handleAvatarClick}
+      className="w-full flex items-center rounded-md bg-zinc-900 border-solid border border-gray-500 drop-shadow-md mb-2"
+    >
       <Avatar name={name} tel={tel} />
       <h3 className="text-lg text-white">{name}</h3>
     </div>
@@ -70,12 +64,9 @@ const Card = ({ name, tel }: ContactType) => {
 };
 
 export const Dashboard = () => {
-  const [contacts, setContacts] = useState<null | ContactType[]>();
   const userData = useAppSelector((state) => state.userDetails.userData);
   const dispatch = useDispatch();
   useEffect(() => {
-    const result = getContacts();
-    setContacts(result);
     (async () => {
       if (userData) {
         const userRef = doc(db, "users", userData.uid);
@@ -90,7 +81,6 @@ export const Dashboard = () => {
           const friend = { ...data, id: doc.id };
           friends.push(friend);
         });
-        console.log(data);
         dispatch(
           setUserData({
             //@ts-ignore
@@ -107,7 +97,7 @@ export const Dashboard = () => {
   }, []);
   return (
     <>
-      <Grid container gap={1} p={2}>
+      <Grid container p={2}>
         <h3 className="text-3xl mb-8 text-green-500 font-medium">
           Welcome to My People{" "}
         </h3>
@@ -115,15 +105,11 @@ export const Dashboard = () => {
           ({ name, phoneNumber, deleted }) =>
             !deleted && <Card name={name} tel={phoneNumber} />
         )}
-        <Grid
-          item
-          container
-          xs={contacts?.length && contacts.length % 2 === 0 ? 12 : 6}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <AddFriendButton />
-        </Grid>
+        <div className="absolute bottom-4 right-4 left-4">
+          <Grid item container justifyContent="center" alignItems="center">
+            <AddFriendButton />
+          </Grid>
+        </div>
       </Grid>
     </>
   );

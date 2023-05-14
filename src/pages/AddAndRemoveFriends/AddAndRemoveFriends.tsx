@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { Friend } from "types/userDetails.types";
 import { addFriend, removeFriend } from "features/auth.slice";
 import { uuidv4 } from "@firebase/util";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseAuth/firebase";
+import { Contacts, GetContactsResult } from "@capacitor-community/contacts";
+
+const retrieveListOfContacts = async () => {
+  const projection = {
+    // Specify which fields should be retrieved.
+    name: true,
+    phones: true,
+    postalAddresses: true,
+  };
+
+  const result = await Contacts.getContacts({
+    projection,
+  });
+  return result;
+};
 
 const Title = () => {
   return (
     <>
-      <h3 className="text-lg mb-10 text-green-500 font-medium">
+      <h3 className="text-lg mb-4 text-green-500 font-medium">
         Please add close Connections (Max 9 ) from Your contacts with whom you
         want to stay in touch
       </h3>
@@ -17,37 +32,48 @@ const Title = () => {
   );
 };
 type Contact = {
-  name: string;
-  phoneNumber: string;
+  name: string | null | undefined;
+  phoneNumber: string | null | undefined;
   id: string;
 };
-const contactsList: Contact[] = [
-  { name: "Rijul Nirwal", phoneNumber: "9999988888", id: uuidv4() },
-  { name: "Anas Nirwal", phoneNumber: "9999988882", id: uuidv4() },
-  { name: "Quaz Nirwal", phoneNumber: "9999988883", id: uuidv4() },
-  { name: "Shivam Nirwal", phoneNumber: "9999988884", id: uuidv4() },
-];
 
-const getListwithAddedFlag = (friends: Friend[], contacts: Contact[]) => {
-  return contacts.map((contacts) => {
-    const friend = friends.find(
-      (friend) => friend.phoneNumber === contacts.phoneNumber
+const getListwithAddedFlag = (
+  friends: Friend[] | null | undefined,
+  contacts: GetContactsResult | null
+) => {
+  const formatedContact: Contact[] =
+    contacts?.contacts.map((contact) => ({
+      name: contact.name?.display,
+      phoneNumber: contact.phones
+        ?.find(() => true)
+        ?.number?.split(" ")
+        .join(""),
+      id: contact.contactId,
+    })) || [];
+  return formatedContact.map((contact) => {
+    const friend = friends?.find(
+      (friend) => friend.phoneNumber === contact.phoneNumber
     );
     if (friend) {
-      return { ...contacts, alreadyAdded: !friend.deleted, id: friend.id };
-    } else {
-      return { ...contacts, alreadyAdded: false };
+      return { ...contact, alreadyAdded: !friend.deleted, id: friend.id };
     }
+    return { ...contact, alreadyAdded: false };
   });
 };
 
 export const AddAndRemoveFriends = () => {
   const userDetails = useAppSelector((state) => state.userDetails);
   const dispatch = useAppDispatch();
-  const ContactsWithFlag = userDetails.userData?.friends
-    ? getListwithAddedFlag(userDetails.userData.friends, contactsList)
-    : [];
+  const [contactsList, setContactsList] = useState<GetContactsResult | null>(
+    null
+  );
+  const [search, setSearch] = useState("");
+  const contactsWithFlag = getListwithAddedFlag(
+    userDetails.userData?.friends,
+    contactsList
+  );
   const handleAddFriendClick = async (friend: Contact) => {
+    console.log({ friend });
     if (userDetails.userData) {
       const friendsRef = doc(
         db,
@@ -75,10 +101,28 @@ export const AddAndRemoveFriends = () => {
       dispatch(removeFriend(id));
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const result = await retrieveListOfContacts();
+      if (result) {
+        setContactsList(result);
+      }
+    })();
+  }, []);
+  const filteredContacts = search
+    ? contactsWithFlag.filter((contact) => contact.name?.includes(search))
+    : contactsWithFlag;
   return (
     <div className="p-4">
       <Title></Title>
-      {ContactsWithFlag.map(
+      <input
+        className="bg-zinc-900 border-2 border-gray-700 pt-4 pb-4 pl-4 w-full rounded text-gray-200"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search"
+      ></input>
+      {filteredContacts.map(
         //@ts-ignore
         ({ name, phoneNumber, alreadyAdded, id, deleted }) => (
           <div
@@ -97,7 +141,9 @@ export const AddAndRemoveFriends = () => {
             {alreadyAdded && (
               <button
                 className="border border-solid border-green-500 text-green-500 p-2 pl-4 pr-4 rounded font-medium"
-                onClick={() => handleRemoveFriendClick(phoneNumber)}
+                onClick={() =>
+                  phoneNumber && handleRemoveFriendClick(phoneNumber)
+                }
                 color="error"
               >
                 Remove
