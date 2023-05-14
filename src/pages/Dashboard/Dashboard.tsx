@@ -95,12 +95,18 @@ export const Dashboard = () => {
       }
     })();
   }, []);
+  console.log({ userData });
   return (
     <>
       <Grid container p={2}>
         <h3 className="text-3xl mb-8 text-green-500 font-medium">
           Welcome to My People{" "}
         </h3>
+        {(!userData?.friends || userData.friends.length === 0) && (
+          <h4 className="text-white">
+            Please Click on Add friends and add your close friends
+          </h4>
+        )}
         {userData?.friends?.map(
           ({ name, phoneNumber, deleted }) =>
             !deleted && <Card name={name} tel={phoneNumber} />
