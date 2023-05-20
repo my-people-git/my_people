@@ -23,7 +23,7 @@ const userDetailsSlice = createSlice({
     addFriend: (state, action: PayloadAction<Friend>) => {
       if (state.userData) {
         if (
-          !!state.userData.friends.find(
+          !!state.userData.friends?.find(
             (friend) => friend.id === action.payload.id
           )
         ) {
@@ -33,7 +33,10 @@ const userDetailsSlice = createSlice({
               : friend
           );
         } else {
-          state.userData.friends = [...state.userData.friends, action.payload];
+          state.userData.friends = [
+            ...(state.userData.friends || []),
+            action.payload,
+          ];
         }
       }
     },

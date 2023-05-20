@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { Friend } from "types/userDetails.types";
 import { addFriend, removeFriend } from "features/auth.slice";
-import { uuidv4 } from "@firebase/util";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db, eventLogger } from "firebaseAuth/firebase";
 import { Contacts, GetContactsResult } from "@capacitor-community/contacts";
@@ -14,11 +13,14 @@ const retrieveListOfContacts = async () => {
     phones: true,
     postalAddresses: true,
   };
-
-  const result = await Contacts.getContacts({
-    projection,
-  });
-  return result;
+  try {
+    const result = await Contacts.getContacts({
+      projection,
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const Title = () => {
@@ -73,18 +75,18 @@ export const AddAndRemoveFriends = () => {
     contactsList
   );
   const handleAddFriendClick = async (friend: Contact) => {
-    if (userDetails.userData) {
+    if (userDetails.userData && friend.phoneNumber && friend.name) {
+      const { phoneNumber, name, id } = friend;
       eventLogger("my_people_updated", {
-        prev_count: userDetails.userData.friends.length,
+        prev_count: userDetails.userData?.friends?.length,
         type: "added",
-        contactName: friend.name,
-        contactNumber: friend.phoneNumber,
+        contactName: name,
+        contactNumber: phoneNumber,
       });
       const uid = userDetails.userData.uid || "";
-      const phoneNumber = friend.phoneNumber || "";
       const friendsRef = doc(db, "users", uid, "friends", phoneNumber);
       await setDoc(friendsRef, { ...friend });
-      dispatch(addFriend({ ...friend, deleted: false }));
+      dispatch(addFriend({ phoneNumber, name, id, deleted: false }));
     }
   };
 
