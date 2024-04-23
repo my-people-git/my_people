@@ -4,7 +4,7 @@
   "webDir": "dist",
   "bundledWebRuntime": false,
   "server": {
-    "url": "https://mypeooples.netlify.app/",
+    "url": "https://creator.wishlink.com",
     "cleartext": true
   }
 }
